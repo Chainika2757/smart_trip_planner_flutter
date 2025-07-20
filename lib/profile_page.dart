@@ -1,15 +1,21 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-import 'login.dart'; 
+import 'login.dart';
 
 class ProfilePage extends StatelessWidget {
   const ProfilePage({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final user = FirebaseAuth.instance.currentUser;
+
     
-    final String userName = "Shubham S.";
-    final String userEmail = "shubham.self@gmail.com";
+    final String userEmail = user?.email ?? 'No Email';
+    final String userName = user?.displayName?.isNotEmpty == true
+        ? user!.displayName!
+        : userEmail.split('@')[0];
+
     final int requestTokens = 1000;
     final int responseTokens = 750;
     final double cost = 0.07;
@@ -48,16 +54,22 @@ class ProfilePage extends StatelessWidget {
                 children: [
                   CircleAvatar(
                     radius: 24,
-                    child: Text(userName[0],
-                        style: const TextStyle(fontSize: 24)),
+                    child: Text(
+                      userName.isNotEmpty ? userName[0].toUpperCase() : "?",
+                      style: const TextStyle(fontSize: 24),
+                    ),
                   ),
                   const SizedBox(height: 10),
-                  Text(userName,
-                      style: const TextStyle(
-                          fontSize: 18, fontWeight: FontWeight.bold)),
+                  Text(
+                    userName,
+                    style: const TextStyle(
+                        fontSize: 18, fontWeight: FontWeight.bold),
+                  ),
                   const SizedBox(height: 4),
-                  Text(userEmail,
-                      style: const TextStyle(color: Colors.grey, fontSize: 14)),
+                  Text(
+                    userEmail,
+                    style: const TextStyle(color: Colors.grey, fontSize: 14),
+                  ),
                   const SizedBox(height: 20),
 
                   // Request Tokens
@@ -68,9 +80,10 @@ class ProfilePage extends StatelessWidget {
                   ),
                   const SizedBox(height: 4),
                   LinearProgressIndicator(
-                    value: 1.0,
+                    value: requestTokens / 1000,
                     backgroundColor: Colors.grey[300],
-                    valueColor: const AlwaysStoppedAnimation<Color>(Colors.green),
+                    valueColor:
+                        const AlwaysStoppedAnimation<Color>(Colors.green),
                   ),
                   const SizedBox(height: 4),
                   Align(
@@ -88,9 +101,10 @@ class ProfilePage extends StatelessWidget {
                   ),
                   const SizedBox(height: 4),
                   LinearProgressIndicator(
-                    value: 0.75,
+                    value: responseTokens / 1000,
                     backgroundColor: Colors.grey[300],
-                    valueColor: const AlwaysStoppedAnimation<Color>(Colors.red),
+                    valueColor:
+                        const AlwaysStoppedAnimation<Color>(Colors.red),
                   ),
                   const SizedBox(height: 4),
                   Align(
@@ -99,21 +113,6 @@ class ProfilePage extends StatelessWidget {
                         style: const TextStyle(fontSize: 12)),
                   ),
                   const SizedBox(height: 10),
-
-                  // Cost
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      const Text("Total Cost",
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 16)),
-                      Text("\$${cost.toStringAsFixed(2)} USD",
-                          style: const TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 16,
-                              color: Colors.green)),
-                    ],
-                  ),
                 ],
               ),
             ),
@@ -121,7 +120,8 @@ class ProfilePage extends StatelessWidget {
 
             // Logout Button
             ElevatedButton.icon(
-              onPressed: () {
+              onPressed: () async {
+                await FirebaseAuth.instance.signOut();
                 Navigator.of(context).pushReplacement(
                   MaterialPageRoute(builder: (context) => const LoginPage()),
                 );
