@@ -1,9 +1,9 @@
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'home_page.dart';
+import 'signup.dart';
 
 class LoginPage extends ConsumerStatefulWidget {
   const LoginPage({super.key});
@@ -101,21 +101,19 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                 SizedBox(
                   width: double.infinity,
                   height: 50,
-                  child: OutlinedButton.icon(
+                  child: OutlinedButton(
                     onPressed: () {
-                      // TODO: Implement Google Sign-In
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(builder: (_) => const SignUpPage()),
+                      );
                     },
-                    icon: Image.asset(
-                      'assets/images/google_logo.png',
-                      height: 24,
-                      width: 24,
-                    ),
-                    label: const Text(
-                      'Sign in with Google',
-                      style: TextStyle(fontSize: 16, color: Colors.black),
-                    ),
                     style: OutlinedButton.styleFrom(
                       side: const BorderSide(color: Colors.grey),
+                    ),
+                    child: const Text(
+                      "Don't have an account? Sign up",
+                      style: TextStyle(fontSize: 16, color: Colors.black),
                     ),
                   ),
                 ),
@@ -125,7 +123,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                     Expanded(child: Divider()),
                     Padding(
                       padding: EdgeInsets.symmetric(horizontal: 12),
-                      child: Text('or sign in with Email'),
+                      child: Text('or login with Email'),
                     ),
                     Expanded(child: Divider()),
                   ],

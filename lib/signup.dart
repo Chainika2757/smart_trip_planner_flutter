@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import 'home_page.dart';
+import 'login.dart'; // ✅ Make sure this points to login.dart
 
 class SignUpPage extends StatefulWidget {
   const SignUpPage({super.key});
@@ -91,21 +92,19 @@ class _SignUpPageState extends State<SignUpPage> {
                 SizedBox(
                   width: double.infinity,
                   height: 50,
-                  child: OutlinedButton.icon(
+                  child: OutlinedButton(
                     onPressed: () {
-                  
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(builder: (_) => const LoginPage()),
+                      );
                     },
-                    icon: Image.asset(
-                      'assets/images/google_logo.png',
-                      height: 24,
-                      width: 24,
-                    ),
-                    label: const Text(
-                      'Sign up with Google',
-                      style: TextStyle(fontSize: 16, color: Colors.black),
-                    ),
                     style: OutlinedButton.styleFrom(
                       side: const BorderSide(color: Colors.grey),
+                    ),
+                    child: const Text(
+                      "Already have an account? Login",
+                      style: TextStyle(fontSize: 16, color: Colors.black),
                     ),
                   ),
                 ),

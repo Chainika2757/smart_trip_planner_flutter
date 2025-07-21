@@ -20,20 +20,29 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Itinera AI',
       debugShowCheckedModeBanner: false,
-      home: AuthWrapper(), 
+      home: const AuthWrapper(), // ✅ Corrected usage
     );
   }
 }
 
 class AuthWrapper extends StatelessWidget {
+  const AuthWrapper({super.key});
+
   @override
   Widget build(BuildContext context) {
-    final user = FirebaseAuth.instance.currentUser;
-
-    if (user != null) {
-      return HomePage(); 
-    } else {
-      return SignUpPage(); 
-    }
+    return StreamBuilder<User?>(
+      stream: FirebaseAuth.instance.authStateChanges(), // ✅ listens for login/logout
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Scaffold(
+            body: Center(child: CircularProgressIndicator()),
+          );
+        } else if (snapshot.hasData) {
+          return const HomePage(); // ✅ User logged in
+        } else {
+          return const SignUpPage(); // 🚪 Not logged in
+        }
+      },
+    );
   }
 }
