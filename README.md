@@ -1,4 +1,4 @@
-# ✈️ Itinera AI — Smart Trip Planner (Flutter + AI)
+#✈️ Itinera AI — Smart Trip Planner (Flutter + AI)
 
 Welcome to the official repository for **Itinera AI**, an AI-powered mobile app built with Flutter.
 This project — developed under the folder name `smart_trip_planner` — lets users generate customized, day-by-day travel itineraries by simply typing natural language prompts like:
